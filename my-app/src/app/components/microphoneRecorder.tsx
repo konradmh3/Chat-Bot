@@ -19,7 +19,7 @@ export const MicrophoneRecorder = () => {
 
               if (mediaRecorder.current && mediaRecorder.current.state === "inactive") {
                 const audioBlob = new Blob(audioChunks.current, {
-                  type: "audio/wav",
+                  type: "audio/webm",
                 });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 const audio = new Audio(audioUrl);
