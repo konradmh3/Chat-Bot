@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
+import OpenAI from "openai";
 
 export const config = {
   api: {
@@ -27,13 +28,19 @@ export default async function handler(
     const newPath = path.join(process.cwd(), "public", "uploads", "audio.webm");
 
     // Move the file to a desired location
-    fs.rename(tempFilePath, newPath, (err) => {
+    fs.rename(tempFilePath, newPath, async (err) => {
       if (err) {
         console.error("Error saving file:", err);
         return res.status(500).json({ text: "File save failed" });
       }
 
       res.status(200).json({ text: "File saved successfully" });
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      const transcription = await openai.audio.translations.create({
+        file: fs.createReadStream("public/uploads/audio.webm"),
+        model: "whisper-1",
+      });
+      console.log(transcription);
     });
   });
 }
