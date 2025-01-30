@@ -1,6 +1,20 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 
-export const MicrophoneRecorder = () => {
+interface MicrophoneRecorderProps {
+  input: string[];
+  setInput: React.Dispatch<React.SetStateAction<string[]>>;
+  response: string[];
+  setResponse: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const MicrophoneRecorder = ({
+  input,
+  setInput,
+  response,
+  setResponse,
+  setIsLoading,
+}: MicrophoneRecorderProps) => {
   const [isRecording, setIsRecording] = useState(false);
   const audioChunks = useRef<Blob[]>([]);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -18,9 +32,33 @@ export const MicrophoneRecorder = () => {
       });
 
       const result = await response.json();
+      // here lets set input value to the result
+      // then call handleResponse
+      const inputElement = document.querySelector("input");
+      inputElement!.value = result.text.text;
+      handleResponse();
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleResponse = async () => {
+    setIsLoading(true);
+    const inputElement = document.querySelector("input");
+    setInput([...input, "You: " + inputElement?.value]);
+    const fetchData = async () => {
+      const tempResp = await fetch("/api/getResponse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ input: inputElement?.value }),
+      });
+      const data = await tempResp.json();
+      setResponse([...response, "Jarvis: " + data.text]);
+    };
+    fetchData();
+    setIsLoading(false);
   };
 
   const handleButtonClick = () => {

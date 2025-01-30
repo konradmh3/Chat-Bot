@@ -34,13 +34,13 @@ export default async function handler(
         return res.status(500).json({ text: "File save failed" });
       }
 
-      res.status(200).json({ text: "File saved successfully" });
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       const transcription = await openai.audio.translations.create({
         file: fs.createReadStream("public/uploads/audio.webm"),
         model: "whisper-1",
-      });
-      console.log(transcription);
+      });      
+      // console.log(transcription);
+      res.status(200).json({ text: transcription});
     });
   });
 }
