@@ -56,9 +56,25 @@ export const MicrophoneRecorder = ({
       });
       const data = await tempResp.json();
       setResponse([...response, "Jarvis: " + data.text]);
+      getMP3Response(data.text);
     };
     fetchData();
     setIsLoading(false);
+  };
+
+  const getMP3Response = async (text: string) => {
+    const response = await fetch("/api/getTextToSpeach", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.play();
   };
 
   const handleButtonClick = () => {
