@@ -45,17 +45,17 @@ export const MicrophoneRecorder = ({
   const handleResponse = async () => {
     setIsLoading(true);
     const inputElement = document.querySelector("input");
-    setInput([...input, "You: " + inputElement?.value]);
+    setInput([...input, "" + inputElement?.value]);
     const fetchData = async () => {
       const tempResp = await fetch("/api/getResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: inputElement?.value }),
+        body: JSON.stringify({ input: inputElement?.value, prevInput: {input}, prevResponse: {response} }),
       });
       const data = await tempResp.json();
-      setResponse([...response, "Jarvis: " + data.text]);
+      setResponse([...response, "" + data.text]);
       getMP3Response(data.text);
     };
     fetchData();

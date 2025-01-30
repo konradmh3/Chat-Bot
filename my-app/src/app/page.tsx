@@ -11,7 +11,7 @@ export default function Home() {
   const handleResponse = async () => {
     setIsLoading(true);
     const inputElement = document.querySelector("input");
-    setInput([...input, "You: " + inputElement?.value]);
+    setInput([...input, "" + inputElement?.value]);
     const fetchData = async () => {
       const tempResp = await fetch("/api/getResponse", {
         method: "POST",
@@ -23,7 +23,7 @@ export default function Home() {
       const data = await tempResp.json();
 
       console.log(data);
-      setResponse([...response, "Jarvis: " + data.text]);
+      setResponse([...response, "" + data.text]);
     };
     fetchData();
     setIsLoading(false);
@@ -36,14 +36,14 @@ export default function Home() {
           {response.map((item, index) => (
             <div key={index} className="text-white flex flex-col mx-2">
               <div className="flex justify-end">
-                <div className="w-fit">{input[index]}</div>
+                <div className="w-fit">You: {input[index]}</div>
               </div>
               <div>
                 <br />
                 {/* split response(item) by \n and map each */}
                 {item.split("\n").map((line, idx) => (
                   <div key={idx} className="w-fit">
-                    {line}
+                    Jarvis: {line}
                     <br />
                   </div>
                 ))}
