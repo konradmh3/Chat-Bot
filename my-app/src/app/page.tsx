@@ -41,9 +41,9 @@ export default function Home() {
               <div>
                 <br />
                 {/* split response(item) by \n and map each */}
-                {item.split("\n").map((line, idx) => (
+                Jarvis:{item.split("\n").map((line, idx) => (
                   <div key={idx} className="w-fit">
-                    Jarvis: {line}
+                     {line}
                     <br />
                   </div>
                 ))}
