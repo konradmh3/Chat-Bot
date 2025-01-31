@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MicrophoneRecorder } from "./components/microphoneRecorder";
+import AudioToAudio from "./components/AudioToAudio";
 
 export default function Home() {
   const [input, setInput] = useState<string[]>([]);
@@ -51,13 +52,14 @@ export default function Home() {
         </div>
 
         <div className="flex items-center justify-center py-2 bg-gray-800 fixed bottom-0 w-full">
-          <MicrophoneRecorder
+          {/* <MicrophoneRecorder
             input={input}
             setInput={setInput}
             response={response}
             setResponse={setResponse}
             setIsLoading={setIsLoading}
-          />
+          /> */}
+          <AudioToAudio/>
           <input
             className="text-black mx-2 px-2 rounded-sm"
             type="text"
