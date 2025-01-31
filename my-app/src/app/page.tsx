@@ -18,10 +18,10 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: inputElement?.value }),
+        body: JSON.stringify({ input: inputElement?.value, prevInput: {input}, prevResponse: {response} }),
       });
-      console.log(data);
-      setResponse([...response, "" + data.text]);
+      const result = await data.json();
+      setResponse([...response, "" + result.text]);
     };
     fetchData();
     setIsLoading(false);
