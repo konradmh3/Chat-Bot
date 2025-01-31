@@ -13,15 +13,13 @@ export default function Home() {
     const inputElement = document.querySelector("input");
     setInput([...input, "" + inputElement?.value]);
     const fetchData = async () => {
-      const tempResp = await fetch("/api/getResponse", {
+      const data = await fetch("/api/getResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ input: inputElement?.value }),
       });
-      const data = await tempResp.json();
-
       console.log(data);
       setResponse([...response, "" + data.text]);
     };
