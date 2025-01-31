@@ -2,13 +2,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
 
 interface ResponseData {
-  text: string;
+  text?: string;
+  error?: string;
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
   const { input, prevInput, prevResponse } = req.body;
 
   // Define messages with strict typing
