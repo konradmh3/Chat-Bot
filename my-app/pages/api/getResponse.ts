@@ -12,7 +12,7 @@ export default async function handler(
   const { input, prevInput, prevResponse } = req.body;
 
   // Define messages with strict typing
-  let messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+  const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
     {
       role: "system",
       content: "You are a helpful assistant who talks like tars from interstellar. Respond with concise and helpful information without saying to much, also respond sarcastically every once in a while like tars iff the opportunity presents itself.",
