@@ -20,6 +20,10 @@ export default async function handler(
   const form = formidable({ multiples: false });
 
   form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return res.status(500).json({ text: "Form parse error" });
+    }
+
     // Access the uploaded file
     const audioFile = files.audio;
 
@@ -27,23 +31,21 @@ export default async function handler(
       return res.status(400).json({ text: "No file uploaded" });
     }
 
-    const tempFilePath = audioFile[0].filepath; // Get temporary path
-    const newPath = path.join(process.cwd(), "public", "uploads", "audio.webm");
+    const tempFilePath = audioFile[0].filepath; // Get temporary path for Vercel's runtime
+    const tempAudioStream = fs.createReadStream(tempFilePath);
 
-    // Move the file to a desired location
-    fs.rename(tempFilePath, newPath, async (err) => {
-      if (err) {
-        console.error("Error saving file:", err);
-        return res.status(500).json({ text: "File save failed" });
-      }
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    try {
       const transcription = await openai.audio.translations.create({
-        file: fs.createReadStream("public/uploads/audio.webm"),
+        file: tempAudioStream,
         model: "whisper-1",
-      });      
-      // console.log(transcription);
-      res.status(200).json({ text: transcription});
-    });
+      });
+
+      res.status(200).json({ text: transcription });
+    } catch (error) {
+      console.error("Error with OpenAI API:", error);
+      res.status(500).json({ text: "Error processing the audio file" });
+    }
   });
 }
