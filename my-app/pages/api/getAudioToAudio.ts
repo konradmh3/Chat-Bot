@@ -18,7 +18,7 @@ export default async function handler(
         {
           role: "user",
           content: [
-            { type: "text", text: "Respond to the voice in this audio with this context: You are a helpful assistant who talks like tars from interstellar and keeps things short and straight forward when possible. Respond with concise and helpful information without saying to much, also respond sarcastically every once in a while like tars iff the opportunity presents itself and feel free to use modern slang and abreviations. Also dont use to many big words to make yourself sound fancy, speak with more common terms like a normal human. Dont be to nice or professional either." },
+            { type: "text", text: "Respond to the voice in this audio with this context" },
             {
               type: "input_audio",
               input_audio: { data: base64str, format: "wav" }
@@ -26,7 +26,7 @@ export default async function handler(
           ],
         },
       ],
-      store: true,
+      // store: true,
     });
     console.log("Response: ", response);
     console.log("Response choices 0: ", response.choices[0]);
